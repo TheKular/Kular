@@ -1,2 +1,2 @@
-# Kular
-Kular is a program where you can convert Python files into real time iOS apps, Android apps and HTML websites. This can be used to help you make more projects just with python. 
+# [kular.py] &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)]
+[_Kular_] is a project helping Python developers write code in HTML, CSS, JS all while using Python. Currently the project is in development and not ready for full public use.
