@@ -1,6 +1,6 @@
 ### KULAR ###
 
-class HTMLGenerator:
+class KularPy:
     def __init__(self):
         self.title = "Kular Project"
         self.body_content = []
@@ -9,29 +9,44 @@ class HTMLGenerator:
     def set_title(self, title):
         self.title = title
 
-    def para(self, text):
-        self.body_content.append(f"<p>{text}</p>")
+    def para(self, text, class_name=None):
+        if class_name:
+            self.body_content.append(f'<p class="{class_name}">{text}</p>')
+        else:
+            self.body_content.append(f"<p>{text}</p>")
 
-    def heading(self, text, level=1):
+    def heading(self, text, level=1, class_name=None):
         if 1 <= level <= 6:
-            self.body_content.append(f"<h{level}>{text}</h{level}>")
+            if class_name:
+                self.body_content.append(f'<h{level} class="{class_name}">{text}</h{level}>')
+            else:
+                self.body_content.append(f"<h{level}>{text}</h{level}>")
         else:
             print("KULAR ERROR: Heading level must be between 1 and 6.")
 
     def url(self, text, url):
         self.body_content.append(f'<a href="{url}">{text}</a>')
 
-    def image(self, src, alt=""):
-        self.body_content.append(f'<img src="{src}" alt="{alt}">')
+    def image(self, src, alt="", class_name=None):
+        if class_name:
+            self.body_content.append(f'<img src="{src}" alt="{alt}" class="{class_name}">')
+        else:
+            self.body_content.append(f'<img src="{src}" alt="{alt}">')
 
-    def ccccccccccccccccccccccccccccccccccccccccccccccccccccc(self):
-        self.body_content.append(f'<h6>hello</h6>')
+    def breakline(self, class_name=None):
+        self.body_content.append(f'<hr class="{class_name}">')
 
-    def breakline(self):
-        self.body_content.append(f'<hr>')
+    def sep(self, class_name=None):
+        self.body_content.append(f'<br class="{class_name}">')
 
-    def sep(self):
-        self.body_content.append(f'<br>')
+    def link(self, href, rel="stylesheet"):
+        self.body_content.append(f'<link rel="{rel}" href="{href}"')
+        print("KULAR WARNING: CSS IS LINKED BY DEFAULT, LINKING IT AGAIN COULD CAUSE ERRORS, IGNORE THIS IF YOU ARE NOT USING IT FOR LINKING")
+    def help():
+        print("If you need help you can visit the kular.py GitHub page.")
+
+    def pass_k():
+        pass
 
     def add_css(self, css):
         self.styles.append(css)
@@ -55,7 +70,7 @@ class HTMLGenerator:
         print(f"HTML file '{html_filename}' and CSS file '{css_filename}' have been created.")
 
 if __name__ == "__main__":
-    generator = HTMLGenerator()
+    generator = KularPy()
 
     # Example usage
     generator.set_title("Welcome to My Website")
