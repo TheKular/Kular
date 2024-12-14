@@ -1,10 +1,13 @@
 ### KULAR ###
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+import threading
 
-class KularPy:
-    def __init__(self):
-        self.title = "Kular Project"
+class zosnel:
+    def __init__(self, port=8000):
+        self.title = "Zosnel Project"
         self.body_content = []
         self.styles = []
+        self.port = port
 
     def set_title(self, title):
         self.title = title
@@ -42,6 +45,7 @@ class KularPy:
     def link(self, href, rel="stylesheet"):
         self.body_content.append(f'<link rel="{rel}" href="{href}"')
         print("KULAR WARNING: CSS IS LINKED BY DEFAULT, LINKING IT AGAIN COULD CAUSE ERRORS, IGNORE THIS IF YOU ARE NOT USING IT FOR LINKING")
+
     def help():
         print("If you need help you can visit the kular.py GitHub page.")
 
@@ -53,7 +57,8 @@ class KularPy:
 
     def generate_html(self):
         html = f"<!DOCTYPE html>\n<html>\n<head>\n<title>{self.title}</title>\n"
-        html += '<link rel="stylesheet" href="style.css">\n'  # Link to external CSS
+        # Include CSS directly in the HTML
+        html += "<style>\n" + self.generate_css() + "\n</style>\n"
         html += "</head>\n<body>\n"
         html += "\n".join(self.body_content)
         html += "\n</body>\n</html>"
@@ -62,9 +67,31 @@ class KularPy:
     def generate_css(self):
         return "\n".join(self.styles)
 
-    def save_to_file(self, html_filename, css_filename):
-        with open(html_filename, 'w') as html_file:
-            html_file.write(self.generate_html())
-        with open(css_filename, 'w') as css_file:
-            css_file.write(self.generate_css())
-        print(f"HTML file '{html_filename}' and CSS file '{css_filename}' have been created.")
+    class CustomHandler(SimpleHTTPRequestHandler):
+        def __init__(self, *args, html_content=None, **kwargs):
+            self.html_content = html_content
+            super().__init__(*args, **kwargs)
+
+        def do_GET(self):
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(self.html_content.encode())
+
+    def serve(self):
+        handler = lambda *args, **kwargs: self.CustomHandler(*args, html_content=self.generate_html(), **kwargs)
+        server = HTTPServer(('localhost', self.port), handler)
+        print(f"Server started at http://localhost:{self.port}")
+        
+        # Run server in a separate thread
+        server_thread = threading.Thread(target=server.serve_forever)
+        server_thread.daemon = True
+        server_thread.start()
+        
+        try:
+            # Keep the main thread running
+            while True:
+                pass
+        except KeyboardInterrupt:
+            print("\nShutting down server...")
+            server.shutdown()
