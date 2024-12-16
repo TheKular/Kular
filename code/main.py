@@ -30,7 +30,7 @@ class zosnel:
     def url(self, text, url):
         self.body_content.append(f'<a href="{url}">{text}</a>')
 
-    def image(self, src, alt="", class_name=None):
+    def img(self, src, alt="", class_name=None):
         if class_name:
             self.body_content.append(f'<img src="{src}" alt="{alt}" class="{class_name}">')
         else:
@@ -44,14 +44,14 @@ class zosnel:
 
     def link(self, href, rel="stylesheet"):
         self.body_content.append(f'<link rel="{rel}" href="{href}"')
-        print("KULAR WARNING: CSS IS LINKED BY DEFAULT, LINKING IT AGAIN COULD CAUSE ERRORS, IGNORE THIS IF YOU ARE NOT USING IT FOR LINKING")
+        print("ZOSNEL WARNING: CSS IS LINKED BY DEFAULT, LINKING IT AGAIN COULD CAUSE ERRORS, IGNORE THIS IF YOU ARE NOT USING IT FOR LINKING")
 
     def help():
         print("If you need help you can visit the kular.py GitHub page.")
 
     def pass_k():
         pass
-
+ 
     def add_css(self, css):
         self.styles.append(css)
 
