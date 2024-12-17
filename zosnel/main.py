@@ -1,4 +1,5 @@
-### KULAR ###
+# zosnel/main.py
+
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 import threading
 
@@ -25,7 +26,7 @@ class zosnel:
             else:
                 self.body_content.append(f"<h{level}>{text}</h{level}>")
         else:
-            print("KULAR ERROR: Heading level must be between 1 and 6.")
+            print("ZOSNEL ERROR: Heading level must be between 1 and 6.")
 
     def url(self, text, url):
         self.body_content.append(f'<a href="{url}">{text}</a>')
@@ -46,18 +47,25 @@ class zosnel:
         self.body_content.append(f'<link rel="{rel}" href="{href}"')
         print("ZOSNEL WARNING: CSS IS LINKED BY DEFAULT, LINKING IT AGAIN COULD CAUSE ERRORS, IGNORE THIS IF YOU ARE NOT USING IT FOR LINKING")
 
-    def help():
-        print("If you need help you can visit the kular.py GitHub page.")
+    def link_css(self, href):
+        self.body_content.append(f'<link rel="stylesheet" href="{href}">')
+
+    def link_js(self, src):
+        self.body_content.append(f'<script src="{src}"></script>')
 
     def pass_k():
         pass
- 
+
+    def custom(self, custom):
+        self.body_content.append(f'{custom}')
+        print("ZOSNEL: Be careful while using custom as it could not work or cause errors on your website, this function does not get support.")
+        print("Element", custom)
+
     def add_css(self, css):
         self.styles.append(css)
 
     def generate_html(self):
         html = f"<!DOCTYPE html>\n<html>\n<head>\n<title>{self.title}</title>\n"
-        # Include CSS directly in the HTML
         html += "<style>\n" + self.generate_css() + "\n</style>\n"
         html += "</head>\n<body>\n"
         html += "\n".join(self.body_content)
@@ -66,6 +74,9 @@ class zosnel:
 
     def generate_css(self):
         return "\n".join(self.styles)
+
+    def javascript(self, javascript):
+        self.body_content.append(f'<script>{javascript}</script>')
 
     class CustomHandler(SimpleHTTPRequestHandler):
         def __init__(self, *args, html_content=None, **kwargs):
@@ -83,13 +94,11 @@ class zosnel:
         server = HTTPServer(('localhost', self.port), handler)
         print(f"Server started at http://localhost:{self.port}")
         
-        # Run server in a separate thread
         server_thread = threading.Thread(target=server.serve_forever)
         server_thread.daemon = True
         server_thread.start()
         
         try:
-            # Keep the main thread running
             while True:
                 pass
         except KeyboardInterrupt:
