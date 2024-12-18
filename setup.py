@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="zosnel",
-    version="0.0.2",
+    version="0.0.3",
     description="A python framework for simple web apps.",
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
